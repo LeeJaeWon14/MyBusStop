@@ -27,5 +27,35 @@ class MainActivity : WearableActivity() {
             finishAffinity()
             System.exit(0)
         }
+
+        var isLoop = true
+        binding.apply {
+            button.setOnClickListener {
+                when(cbThread.isChecked) {
+                    true -> {
+                        Thread {
+                            while(isLoop) {
+                                if(progressbar.progress == 100) progressbar.progress = 0
+                                progressbar.progress += 10
+                                Thread.sleep(200)
+                            }
+                        }.start()
+                        isLoop = true
+                    }
+                    false -> {
+                        if(progressbar.progress == 100) {
+                            progressbar.progress = 0
+                            return@setOnClickListener
+                        }
+                        progressbar.progress += 10
+                    }
+                }
+            }
+            button.setOnLongClickListener {
+                isLoop = !isLoop
+//                Thread.currentThread().interrupt()
+                false
+            }
+        }
     }
 }

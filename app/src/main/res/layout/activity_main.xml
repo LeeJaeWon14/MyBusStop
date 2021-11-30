@@ -12,7 +12,8 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/inner_frame_layout_padding" >
+        android:padding="@dimen/inner_frame_layout_padding"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/text"
@@ -34,4 +35,33 @@
             android:layout_gravity="bottom|right" />
 
     </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+        <ProgressBar
+            android:id="@+id/progressbar"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:max="100"/>
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cb_thread"
+            android:layout_centerHorizontal="true"
+            android:text="up" />
+
+        <CheckBox
+            android:id="@+id/cb_thread"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/progressbar"
+            android:layout_centerHorizontal="true"
+            android:text="Thread" />
+
+    </RelativeLayout>
 </androidx.wear.widget.BoxInsetLayout>
