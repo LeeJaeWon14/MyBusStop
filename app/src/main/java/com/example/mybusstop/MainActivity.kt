@@ -4,7 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.wearable.activity.ConfirmationActivity
 import android.support.wearable.activity.WearableActivity
+import android.widget.Toast
 import com.example.mybusstop.databinding.ActivityMainBinding
+import java.lang.Exception
 
 class MainActivity : WearableActivity() {
     private lateinit var binding : ActivityMainBinding
@@ -28,19 +30,28 @@ class MainActivity : WearableActivity() {
             System.exit(0)
         }
 
-        var isLoop = true
         binding.apply {
-            button.setOnClickListener {
+            var thread: Thread? = null
+            btnStart.setOnClickListener {
                 when(cbThread.isChecked) {
                     true -> {
-                        Thread {
-                            while(isLoop) {
+                        thread = Thread {
+                            while(true) {
                                 if(progressbar.progress == 100) progressbar.progress = 0
                                 progressbar.progress += 10
-                                Thread.sleep(200)
+                                try {
+                                    Thread.sleep(200)
+                                } catch(e: InterruptedException) {
+                                    break
+                                }
                             }
-                        }.start()
-                        isLoop = true
+                        }
+                        thread?.run {
+                            if (isAlive)
+                                Toast.makeText(this@MainActivity, "already run!!", Toast.LENGTH_SHORT).show()
+                            else
+                                start()
+                        }
                     }
                     false -> {
                         if(progressbar.progress == 100) {
@@ -51,10 +62,13 @@ class MainActivity : WearableActivity() {
                     }
                 }
             }
-            button.setOnLongClickListener {
-                isLoop = !isLoop
-//                Thread.currentThread().interrupt()
-                false
+            btnStop.setOnClickListener {
+                thread?.run {
+                    if(isAlive)
+                        interrupt()
+                    else
+                        return@setOnClickListener
+                }
             }
         }
     }
